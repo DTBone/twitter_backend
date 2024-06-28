@@ -8,6 +8,7 @@ public class TwitUtil {
     public static boolean isLikedByReqUser(User reqUser, Twit twit) {
         for (Like like : twit.getLikes()) {
             if(like.getUser().getId().equals(reqUser.getId())){
+
                 return true;
             }
         }
