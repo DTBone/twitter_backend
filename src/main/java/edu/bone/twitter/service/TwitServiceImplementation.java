@@ -55,7 +55,7 @@ public class TwitServiceImplementation implements TwitService{
     @Override
     public Twit findById(Long twitId) throws TwitException {
         Twit twit = twitRepository.findById(twitId).orElseThrow(()-> new TwitException("Twit not found with id " + twitId));
-        return null;
+        return twit;
     }
 
     @Override
@@ -86,8 +86,10 @@ public class TwitServiceImplementation implements TwitService{
         twit.setTwit(false);
 
         twit.setReplyFor(replyFor);
-        Twit saveReply = twitRepository.save(twit);
-        twit.getReplyTwits().add(saveReply);
+
+        Twit savedReply = twitRepository.save(twit);
+//        twit.getReplyTwits().add(saveReply);
+        replyFor.getReplyTwits().add(savedReply);
         twitRepository.save(replyFor);
 
         return replyFor;

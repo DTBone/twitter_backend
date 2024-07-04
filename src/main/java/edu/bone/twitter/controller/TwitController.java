@@ -44,7 +44,7 @@ public class TwitController {
         return new ResponseEntity<>(twitDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{twit}/retwit")
+    @PutMapping("/{twitId}/retwit")
     public ResponseEntity<TwitDto> retwit(@PathVariable Long twitId, @RequestHeader("Authorization") String jwt) throws UserException, TwitException {
         User user = userService.findUserProfileByJwt(jwt);
         Twit twit = twitService.retwit(twitId, user);
@@ -54,7 +54,7 @@ public class TwitController {
         return new ResponseEntity<>(twitDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{twit}")
+    @GetMapping("/{twitId}")
     public ResponseEntity<TwitDto> findTwitById(@PathVariable Long twitId, @RequestHeader("Authorization") String jwt) throws UserException, TwitException {
         User user = userService.findUserProfileByJwt(jwt);
         Twit twit = twitService.findById(twitId);
@@ -80,7 +80,13 @@ public class TwitController {
     @GetMapping("/")
     public ResponseEntity<List<TwitDto>> getAllTwits(@RequestHeader("Authorization") String jwt) throws UserException, TwitException {
         User user = userService.findUserProfileByJwt(jwt);
+        if (user == null) {
+            throw new UserException("User not found for the provided JWT.");
+        }
         List<Twit> twits = twitService.findAllTwit();
+        if (twits == null || twits.isEmpty()) {
+            throw new TwitException("No twits found.");
+        }
 
         List<TwitDto> twitDtos = TwitDtoMapper.toTwitDtos(twits, user);
 

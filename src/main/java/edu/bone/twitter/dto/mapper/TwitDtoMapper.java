@@ -39,6 +39,9 @@ public class TwitDtoMapper {
     }
 
     public static List<TwitDto> toTwitDtos(List<Twit> twits, User reqUser) {
+        if (reqUser == null) {
+            throw new IllegalArgumentException("reqUser cannot be null");
+        }
         List<TwitDto> twitDtos = new ArrayList<>();
 
         for (Twit twit : twits) {

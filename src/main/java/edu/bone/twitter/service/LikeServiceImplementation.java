@@ -33,6 +33,9 @@ public class LikeServiceImplementation  implements LikeService{
             return isLikeExist;
         }
         Twit twit = twitService.findById(twitId);
+        if (twit == null) {
+            throw new TwitException("Tweet with id " + twitId + " not found");
+        }
         Like like = new Like();
         like.setTwit(twit);
         like.setUser(user);
